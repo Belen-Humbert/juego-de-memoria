@@ -18,10 +18,8 @@ GRAY = (200, 200, 200)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-# Fuente para el resto del juego
-FONT = pygame.font.Font('assets/fonts/press_start_2p.ttf', 36)
 
-# Fuente para las instrucciones
+FONT = pygame.font.Font('assets/fonts/press_start_2p.ttf', 36)
 INSTRUCTION_FONT = pygame.font.Font('assets/fonts/ComicCup.otf', 30)
 
 # Configuración del juego
@@ -31,9 +29,9 @@ GRID_SIZE = 4
 SYMBOLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] * 2
 TIME_LIMIT = 60  # Tiempo límite en segundos
 
-# Cargar música de fondo
+# Carga música de fondo
 pygame.mixer.music.load('assets/sounds/sound1.wav')
-pygame.mixer.music.set_volume(0.5)  # Ajustar el volumen (0.0 a 1.0)
+pygame.mixer.music.set_volume(0.5)  # Ajusta el volumen
 pygame.mixer.music.play(-1)  # Reproduce la música en bucle
 
 class Card:
@@ -122,8 +120,7 @@ def draw_timer(start_time):
     screen.blit(timer_text, text_rect)
 
 def enemy_action(cards, revealed_cards):
-    """Acción del enemigo que oculta cartas después de un breve tiempo."""
-    pygame.time.wait(500)  # Tiempo que el enemigo espera antes de ocultar cartas
+    pygame.time.wait(60)  # Tiempo que el enemigo espera antes de ocultar cartas
     for card in revealed_cards:
         if not card.matched:
             card.revealed = False
@@ -209,7 +206,7 @@ def main():
                     in_menu = True
                     break
 
-                pygame.display.flip()  # Asegúrate de que se actualice la pantalla
+                pygame.display.flip()  
                 clock.tick(30)
 
 if __name__ == "__main__":
