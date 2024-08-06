@@ -17,6 +17,8 @@ WHITE = (255, 255, 255)
 GRAY = (200, 200, 200)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+RED = (255, 0, 0)  
+YELLOW = (255, 255, 0)  
 
 
 FONT = pygame.font.Font('assets/fonts/press_start_2p.ttf', 36)
@@ -70,8 +72,8 @@ def draw_board(cards):
 def draw_menu():
     screen.fill(BLACK)
     title = FONT.render("Juego de Memoria", True, WHITE)
-    start_text = FONT.render("Jugar", True, WHITE)
-    instructions_text = FONT.render("Instrucciones", True, WHITE)
+    start_text = FONT.render("Jugar", True, RED)
+    instructions_text = FONT.render("Instrucciones", True, YELLOW)
 
     title_rect = title.get_rect(center=(WIDTH // 2, HEIGHT // 4))
     start_rect = start_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
