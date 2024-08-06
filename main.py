@@ -20,7 +20,6 @@ BLUE = (0, 0, 255)
 RED = (255, 0, 0)  
 YELLOW = (255, 255, 0)  
 
-
 FONT = pygame.font.Font('assets/fonts/press_start_2p.ttf', 36)
 INSTRUCTION_FONT = pygame.font.Font('assets/fonts/ComicCup.otf', 30)
 
@@ -84,6 +83,7 @@ def draw_menu():
     screen.blit(instructions_text, instructions_rect)
 
     pygame.display.flip()
+    return start_rect, instructions_rect
 
 def draw_instructions():
     screen.fill(BLACK)
@@ -106,6 +106,7 @@ def draw_instructions():
     screen.blit(back_text, back_rect)
 
     pygame.display.flip()
+    return back_rect
 
 def draw_timer(start_time):
     elapsed_time = time.time() - start_time
@@ -114,7 +115,6 @@ def draw_timer(start_time):
     seconds = remaining_time % 60
     timer_text = FONT.render(f"Tiempo: {minutes:02d}:{seconds:02d}", True, WHITE)
     
-    # Calcula la posición del cronómetro
     text_rect = timer_text.get_rect()
     text_rect.right = WIDTH - 10
     text_rect.bottom = HEIGHT - 10
@@ -132,6 +132,11 @@ def main():
     show_instructions = False
 
     while True:
+        if in_menu:
+            start_rect, instructions_rect = draw_menu()
+        elif show_instructions:
+            back_rect = draw_instructions()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -140,25 +145,21 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mouse_pos = event.pos
                 if in_menu:
-                    if WIDTH // 2 - 50 <= mouse_pos[0] <= WIDTH // 2 + 50:
-                        if HEIGHT // 2 - 80 <= mouse_pos[1] <= HEIGHT // 2 - 20:
-                            in_menu = False
-                            start_time = time.time()  # Guardar el tiempo de inicio
-                        elif HEIGHT // 2 + 20 <= mouse_pos[1] <= HEIGHT // 2 + 80:
-                            show_instructions = True
-                    if show_instructions and HEIGHT - 140 <= mouse_pos[1] <= HEIGHT - 60:
+                    if start_rect.collidepoint(mouse_pos):
+                        in_menu = False
+                        start_time = time.time()
+                    elif instructions_rect.collidepoint(mouse_pos):
+                        show_instructions = True
+                        in_menu = False
+                elif show_instructions:
+                    if back_rect.collidepoint(mouse_pos):
                         show_instructions = False
                         in_menu = True
                 else:
-                    if show_instructions and HEIGHT - 140 <= mouse_pos[1] <= HEIGHT - 60:
-                        show_instructions = False
-                        in_menu = True
+                    # Lógica del juego...
+                    pass
 
-        if in_menu:
-            draw_menu()
-        elif show_instructions:
-            draw_instructions()
-        else:
+        if not in_menu and not show_instructions:
             cards = create_board()
             selected_cards = []
             matches = 0
@@ -184,7 +185,6 @@ def main():
                                         enemy_action(cards, selected_cards)
                                     selected_cards = []
 
-                # Actualiza la pantalla
                 screen.fill(BLACK)
                 draw_board(cards)
                 draw_timer(start_time)
